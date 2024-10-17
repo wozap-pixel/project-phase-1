@@ -28,5 +28,7 @@ A simple web application for managing income, expenses, and tracking financial t
 ## Credits
 
 Developed by [Peter]
+## support and contact details
+email:mutisyapeter336@gmail.com
 
 
