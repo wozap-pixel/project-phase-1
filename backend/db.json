@@ -1,0 +1,49 @@
+{
+  "budgetTransactions": [
+    {
+      "id": "2",
+      "userId": 1,
+      "type": "expense",
+      "amount": 200,
+      "description": "Groceries"
+    },
+    {
+      "id": "3",
+      "userId": 1,
+      "type": "income",
+      "amount": 500,
+      "description": "Freelance Work"
+    },
+    {
+      "id": "4",
+      "userId": 1,
+      "type": "expense",
+      "amount": 150,
+      "description": "Utilities"
+    },
+    {
+      "id": "e89f",
+      "type": "income",
+      "amount": 100,
+      "description": "Salary"
+    },
+    {
+      "id": "425f",
+      "type": "income",
+      "amount": 100,
+      "description": "Salary"
+    },
+    {
+      "id": "3e70",
+      "type": "income",
+      "amount": 100,
+      "description": "Salary"
+    },
+    {
+      "id": "d98c",
+      "type": "income",
+      "amount": 100,
+      "description": "Salary"
+    }
+  ]
+}
