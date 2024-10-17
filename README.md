@@ -32,3 +32,6 @@ Developed by [Peter]
 email:mutisyapeter336@gmail.com
 
 
+## license
+licenced under the MT-licence
+copyright(c)2024 Peter Mutua
