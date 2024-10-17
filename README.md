@@ -17,8 +17,9 @@ A simple web application for managing income, expenses, and tracking financial t
 3. View and manage transaction history.
 4. Delete transactions by clicking on them.
 ## links
-https://project-phase-1-g43m.onrender.com
-https://wozap-pixel.github.io/project-phase-1/
+1 https://project-phase-1-g43m.onrender.com
+2 https://wozap-pixel.github.io/project-phase-1/BudgetTransactions
+
 
 ## Technologies Used
 
