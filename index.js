@@ -1,5 +1,8 @@
+// Set the API URL for your JSON Server
+const apiUrl = 'http://localhost:3000/budgetTransactions';
+
 // Initial transactions data from localStorage or empty array
-let transactions = JSON.parse(localStorage.getItem('budgetTransactions')) || [];
+let transactions = [];
 
 // Selecting DOM elements
 const incomeForm = document.getElementById('income-form');
@@ -10,33 +13,40 @@ const totalBalanceDisplay = document.getElementById('total-balance');
 const incomeTransactionsList = document.getElementById('income-transactions');
 const expenseTransactionsList = document.getElementById('expense-transactions');
 
-// Function to calculate and update balance
+// Function to fetch all transactions
+function fetchTransactions() {
+  fetch(apiUrl)
+    .then(response => {
+      if (!response.ok) throw new Error('Network response was not ok');
+      return response.json();
+    })
+    .then(data => {
+      transactions = data;
+      updateBalances();
+      renderIncomeTransactions();
+      renderExpenseTransactions();
+    })
+    .catch(error => console.error('Error fetching transactions:', error));
+}
+
+// Function to update and display balances
 function updateBalances() {
-  // Calculate income total
   const incomeTotal = transactions
     .filter(transaction => transaction.type === 'income')
     .reduce((acc, transaction) => acc + transaction.amount, 0);
-
-  // Calculate expense total
+  
   const expenseTotal = transactions
     .filter(transaction => transaction.type === 'expense')
     .reduce((acc, transaction) => acc + transaction.amount, 0);
 
-  // Update income balance
   incomeBalanceDisplay.textContent = incomeTotal.toFixed(2);
-
-  // Update expense balance
   expenseBalanceDisplay.textContent = expenseTotal.toFixed(2);
-
-  // Calculate and update total balance
-  const totalBalance = incomeTotal - expenseTotal;
-  totalBalanceDisplay.textContent = totalBalance.toFixed(2);
+  totalBalanceDisplay.textContent = (incomeTotal - expenseTotal).toFixed(2);
 }
 
-// Function to render transactions for income
+// Function to render income transactions
 function renderIncomeTransactions() {
-  incomeTransactionsList.innerHTML = ''; // Clear existing list
-
+  incomeTransactionsList.innerHTML = '';
   transactions
     .filter(transaction => transaction.type === 'income')
     .forEach(transaction => {
@@ -45,10 +55,9 @@ function renderIncomeTransactions() {
     });
 }
 
-// Function to render transactions for expenses
+// Function to render expense transactions
 function renderExpenseTransactions() {
-  expenseTransactionsList.innerHTML = ''; // Clear existing list
-
+  expenseTransactionsList.innerHTML = '';
   transactions
     .filter(transaction => transaction.type === 'expense')
     .forEach(transaction => {
@@ -81,54 +90,63 @@ function createTransactionElement(transaction) {
   return li;
 }
 
-// Function to handle adding income or expense
+// Function to add a transaction
 function addTransaction(type, amount, description) {
   const newTransaction = {
-    id: transactions.length > 0 ? transactions[transactions.length - 1].id + 1 : 1,
-    userId: 1, // Assuming user ID 1 for simplicity
     type: type,
     amount: parseFloat(amount),
     description: description
   };
 
-  transactions.push(newTransaction);
-  updateBalances();
-
-  // Update transactions list based on type
-  if (type === 'income') {
-    renderIncomeTransactions();
-  } else if (type === 'expense') {
-    renderExpenseTransactions();
-  }
-
-  saveTransactionsToLocalStorage();
+  fetch(apiUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(newTransaction)
+  })
+    .then(response => {
+      if (!response.ok) throw new Error('Network response was not ok');
+      return response.json();
+    })
+    .then(addedTransaction => {
+      transactions.push(addedTransaction);
+      updateBalances();
+      if (type === 'income') {
+        renderIncomeTransactions();
+      } else {
+        renderExpenseTransactions();
+      }
+    })
+    .catch(error => console.error('Error adding transaction:', error));
 }
 
-// Function to handle deleting a transaction
+// Function to delete a transaction
 function deleteTransaction(id) {
-  transactions = transactions.filter(transaction => transaction.id !== id);
-  updateBalances();
-  renderIncomeTransactions();
-  renderExpenseTransactions();
-  saveTransactionsToLocalStorage();
+  fetch(`${apiUrl}/${id}`, {
+    method: 'DELETE'
+  })
+    .then(response => {
+      if (!response.ok) throw new Error('Network response was not ok');
+      transactions = transactions.filter(transaction => transaction.id !== id);
+      updateBalances();
+      renderIncomeTransactions();
+      renderExpenseTransactions();
+    })
+    .catch(error => console.error('Error deleting transaction:', error));
 }
 
-// Function to save transactions to localStorage
-function saveTransactionsToLocalStorage() {
-  localStorage.setItem('budgetTransactions', JSON.stringify(transactions));
-}
-
-// Event listeners for income form submission
+// Event listener for income form submission
 incomeForm.addEventListener('submit', function(event) {
   event.preventDefault();
   const amount = parseFloat(this['income-amount'].value);
   const description = this['income-description'].value.trim();
 
-  if (amount && description) {
+  if (amount > 0 && description) {
     addTransaction('income', amount, description);
     this.reset();
   } else {
-    alert('Please enter both amount and description for income.');
+    alert('Please enter a valid amount and description for income.');
   }
 });
 
@@ -138,12 +156,13 @@ expenseForm.addEventListener('submit', function(event) {
   const amount = parseFloat(this['expense-amount'].value);
   const description = this['expense-description'].value.trim();
 
-  if (amount && description) {
+  if (amount > 0 && description) {
     addTransaction('expense', amount, description);
     this.reset();
   } else {
-    alert('Please enter both amount and description for expense.');
+    alert('Please enter a valid amount and description for expense.');
   }
 });
 
-// Initial render of transactions
+// Fetch initial transactions when the page loads
+fetchTransactions();

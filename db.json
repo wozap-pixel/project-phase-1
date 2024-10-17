@@ -1,32 +1,55 @@
 {
   "budgetTransactions": [
     {
-      "id": 1,
-      "userId": 1,
-      "type": "income",
-      "amount": 1000.00,
-      "description": "Salary"
-    },
-    {
-      "id": 2,
+      "id": "2",
       "userId": 1,
       "type": "expense",
-      "amount": 200.00,
+      "amount": 200,
       "description": "Groceries"
     },
     {
-      "id": 3,
+      "id": "3",
       "userId": 1,
       "type": "income",
-      "amount": 500.00,
+      "amount": 500,
       "description": "Freelance Work"
     },
     {
-      "id": 4,
+      "id": "4",
       "userId": 1,
       "type": "expense",
-      "amount": 150.00,
+      "amount": 150,
       "description": "Utilities"
+    },
+    {
+      "id": "e89f",
+      "type": "income",
+      "amount": 100,
+      "description": "Salary"
+    },
+    {
+      "id": "425f",
+      "type": "income",
+      "amount": 100,
+      "description": "Salary"
+    },
+    {
+      "id": "3e70",
+      "type": "income",
+      "amount": 100,
+      "description": "Salary"
+    },
+    {
+      "id": "d98c",
+      "type": "income",
+      "amount": 100,
+      "description": "Salary"
+    },
+    {
+      "id": "0ea0",
+      "type": "income",
+      "amount": 100,
+      "description": "Salary"
     }
   ]
 }
