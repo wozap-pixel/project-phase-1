@@ -1,5 +1,5 @@
-// Set the API URL for your JSON Server
-const apiUrl = 'http://localhost:3000/budgetTransactions';
+//  API URL for  JSON Server
+const apiUrl = 'https://project-phase-1-g43m.onrender.com/budgetTransactions';
 
 // Initial transactions data from localStorage or empty array
 let transactions = [];
